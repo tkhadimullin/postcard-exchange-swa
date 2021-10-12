@@ -5,7 +5,7 @@ namespace api {
 
         public BaseFunction(PostcardExchangeContext context) {
             Context = context;
-            context.EnsureCreated();
+            context.Database.EnsureCreated();
         }
     }
 }
