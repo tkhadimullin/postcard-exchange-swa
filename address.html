@@ -28,25 +28,38 @@
       </div>
     </nav>
 
-    <h1>Welcome to Postcard Exchange</h1> 
+    <h1>And your next postcard goes to...</h1> 
 
-    <div class="row justify-content-md-center">
-    <p>Where your dreams of making lasting friendship come true.</p>
-    <a role="button" class="btn btn-primary btn-lg" href="/address.html" >Send a postcard</a>
-
-    <article>
-      <p>This website allows you to exchange postcards with like minded strangers.</p>
-      <ul>
-        <li>pop your address in</li>
-        <li>pick up a random address to write to</li>
-        <li>write a postcard and send it off</li>
-      </ul>
-    </article>
-  </div>
+    <div class="row justify-content-md-center">      
+      <div class="card">
+        <div id="recipient-card" class="card-body" style="display: none;">
+          <h5 class="card-title" id="recipient-name"></h5>
+          <p class="card-text"><pre id="recipient-address"></pre></p>        
+        </div>
+      </div> 
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>    
     <script src="clientSide.js"></script>
     <script type="text/javascript">
+      async function getRandomAddress() {
+        const response = await fetch('/api/NextAddress');
+        if(response.redirected) {
+          window.location = response.url;
+          return;
+        }
+        const recipient = await response.json();
+        
+        const nameLabel = document.getElementById("recipient-name");
+        nameLabel.innerText = recipient.name || '';
+
+        const addrLabel = document.getElementById("recipient-address");
+        addrLabel.innerText = recipient.address || '';
+
+        const card = document.getElementById("recipient-card");
+        card.style="display:block";        
+      }
+        
       async function run() {
         let clientPrincipal = await getUserInfo();
         const usr = document.getElementById("user-info");
@@ -57,6 +70,8 @@
           usr.innerHTML = '<a class="nav-link active btn btn-secondary" aria-current="page" href="/.auth/login/facebook">Login</a>';
         }      
       }
+
+      getRandomAddress();
       run();
     </script>
   </body>  

@@ -1,0 +1,19 @@
+{
+    "routes": [
+        {
+            "route": "/api/*",
+            "methods": ["GET", "POST"],
+            "allowedRoles": ["authenticated"]
+        },
+        {
+            "route": "/login",
+            "rewrite": "/.auth/login/facebook"
+        }
+    ],
+    "responseOverrides": {
+        "401": {
+            "redirect": "/login",
+            "statusCode": 302
+          }
+    }
+}
