@@ -38,7 +38,7 @@ namespace api
             
             Context.SaveChanges();
                 
-            return new RedirectResult("/thankyou.html");
+            return new RedirectResult("/thankyou");
         }
     }
 }
